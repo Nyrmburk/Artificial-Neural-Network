@@ -6,8 +6,8 @@ public class Synapse {
 
 	Neuron connectedTo;
 	Neuron connectedFrom;
-	double weight;
-	double deltaWeight;
+	float weight;
+	float deltaWeight;
 
 	private static Random random = new Random();
 	
@@ -18,11 +18,11 @@ public class Synapse {
 	
 	public Synapse(Neuron from, Neuron to) {
 		
-		this(from, to, random.nextDouble()*2f-1f);
-//		this(from, to, random.nextDouble());
+		this(from, to, random.nextFloat()*2f-1f);
+//		this(from, to, random.nextFloat());
 	}
 
-	public Synapse(Neuron from, Neuron to, double weight) {
+	public Synapse(Neuron from, Neuron to, float weight) {
 
 		this.connectedFrom = from;
 		this.connectedTo = to;

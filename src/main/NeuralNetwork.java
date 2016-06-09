@@ -53,9 +53,9 @@ public class NeuralNetwork {
 		Neuron.resetCounter();
 	}
 
-	public double[] forwardPropogate(double[] inputVals) {
+	public float[] forwardPropagate(float[] inputVals) {
 
-		double[] outputVals = new double[outputs];
+		float[] outputVals = new float[outputs];
 
 		for (Neuron neuron : neurons)
 			neuron.value = 0;
@@ -69,18 +69,17 @@ public class NeuralNetwork {
 		return outputVals;
 	}
 
-	public double backPropogate(double[] inputVals, double[] targetOutput) {
+	public float backPropagate(float[] targetOutput) {
 
 		for (Neuron neuron : neurons)
 			neuron.gradient = 0;
 
 		for (int i = inputs + processing; i < inputs + processing + outputs; i++) {
 
-			neurons[i].backward(targetOutput[i - (inputs + processing)]
-					- neurons[i].value);
+			neurons[i].backward(targetOutput[i - (inputs + processing)] - neurons[i].value);
 		}
 
-		double average = 0;
+		float average = 0;
 		for (int i = 0; i < targetOutput.length; i++) {
 
 			average += targetOutput[i] - neurons[inputs + processing + i].value;
@@ -102,19 +101,18 @@ public class NeuralNetwork {
 			StringBuilder sb = new StringBuilder();
 			formatter = new Formatter(sb);
 
-			out.write("top " + inputs + " " + processing + " " + outputs
-					+ "\n\n");
-
+			formatter.format("top %d %d %d%n%n", inputs, processing, outputs);
+			
 			for (Neuron neuron : neurons) {
 
 				for (Synapse synapse : neuron.outputs) {
 
-					out.write(formatter.format("s %+06f %d %d%n",
+					formatter.format("s %f %d %d%n",
 							synapse.weight, neuron.index,
-							synapse.connectedTo.index).toString());
-					sb.setLength(0);
+							synapse.connectedTo.index);
 				}
 			}
+			out.write(formatter.toString());
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -184,7 +182,7 @@ public class NeuralNetwork {
 			break;
 		case "s":
 
-			double weight = Double.parseDouble(splitLine[1]);
+			float weight = Float.parseFloat(splitLine[1]);
 			int from = Integer.parseInt(splitLine[2]);
 			int to = Integer.parseInt(splitLine[3]);
 

@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 
 public class Image {
 
-	public static double[][] getTargets(BufferedImage image) {
+	public static float[][] getTargets(BufferedImage image) {
 
 		int totalSize = image.getWidth() * image.getWidth();
-		double[][] targets = new double[totalSize][3];
+		float[][] targets = new float[totalSize][3];
 
 		for (int y = 0; y < image.getHeight(); y++) {
 
@@ -20,18 +20,18 @@ public class Image {
 		return targets;
 	}
 
-	private static double[] getArrayFromInt(int rgb) {
+	private static float[] getArrayFromInt(int rgb) {
 
-		double[] array = new double[3];
+		float[] array = new float[3];
 
-		array[0] = (double) ((rgb & 0x00FF0000) >> 16) / 255;
-		array[1] = (double) ((rgb & 0x0000FF00) >> 8) / 255;
-		array[2] = (double) (rgb & 0x000000FF) / 255;
+		array[0] = (float) ((rgb & 0x00FF0000) >> 16) / 255;
+		array[1] = (float) ((rgb & 0x0000FF00) >> 8) / 255;
+		array[2] = (float) (rgb & 0x000000FF) / 255;
 
 		return array;
 	}
 	
-	private static int getIntFromArray(double[] array, int offset) {
+	private static int getIntFromArray(float[] array, int offset) {
 
 		int rgb = 0;
 		rgb |= (int)(array[offset + 0] * 255) << 16;
@@ -41,7 +41,7 @@ public class Image {
 		return rgb;
 	}
 
-	public static BufferedImage createImageFromOutput(double[] output,
+	public static BufferedImage createImageFromOutput(float[] output,
 			int width, int height) {
 
 		BufferedImage image = new BufferedImage(width, height,

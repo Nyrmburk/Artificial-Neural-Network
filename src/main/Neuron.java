@@ -13,12 +13,14 @@ public class Neuron {
 	private boolean isInput = false;
 	private static int counter = 0;
 
-	double value;
-	double gradient;
-	public double error = 0;
+	float value;
+	float gradient;
+	public float error = 0;
 
-	private static double learnRate = 0.6;
-	private static double momentumWeight = 0.7;
+	private static float learnRate = 0.6f;
+	private static float momentumWeight = 0.7f;
+//	private static float learnRate = 3;
+//	private static float momentumWeight = 1;
 
 	public Neuron() {
 
@@ -50,14 +52,14 @@ public class Neuron {
 		neuron.connect(synapse);
 	}
 
-	public void connectTo(Neuron neuron, double weight) {
+	public void connectTo(Neuron neuron, float weight) {
 
 		Synapse synapse = new Synapse(this, neuron, weight);
 		outputs.add(synapse);
 		neuron.connect(synapse);
 	}
 
-	public void forward(double value) {
+	public void forward(float value) {
 
 		this.value += value;
 		received++;
@@ -75,14 +77,14 @@ public class Neuron {
 
 			for (Synapse synapse : outputs) {
 
-				double outval = getOutputVal(synapse);
-				// double out = activation(outval);
+				float outval = getOutputVal(synapse);
+				// float out = activation(outval);
 				synapse.connectedTo.forward(outval);
 			}
 		}
 	}
 
-	public void backward(double gradient) {
+	public void backward(float gradient) {
 
 		this.gradient += gradient;
 		received++;
@@ -105,26 +107,28 @@ public class Neuron {
 		}
 	}
 
-	public double getOutputVal(Synapse synapse) {
+	public float getOutputVal(Synapse synapse) {
 
 		return value * synapse.weight;
 	}
 
-	private double activation(double sum) {
+	private float activation(float sum) {
 
 		// Sigmoid [0, 1]
-		return (1d / (1 + Math.exp(-sum)));
+		return (1f / (1 + (float) Math.exp(-sum)));
+//            return sum;
 
 		// hyperbolic tanjent [-1, 1]
 		// return Math.tanh(sum);
 	}
 
 	// TODO find out what to use for
-	public static double activationDerivative(double x) {
+	public static float activationDerivative(float x) {
 
 		// sigmoid derivative
-		double eToX = Math.pow(Math.E, x);
-		return eToX / Math.pow(eToX + 1, 2);
+		float eToX = (float) Math.pow(Math.E, x);
+		float eToX1 = eToX + 1;
+		return eToX / (eToX1 * eToX1);
 
 		// hyperbolic derivative
 		// return (1f - Math.pow(Math.tanh(x), 2));
@@ -133,11 +137,11 @@ public class Neuron {
 		// return 1f - x * x;
 	}
 
-	// public double getOutputError(double target) {
+	// public float getOutputError(float target) {
 	//
-	// // double error = Math.pow(target - output, 2) / 2;
-	// // double value = activation(this.value);
-	// double error = value * (1 - value) * (target - value);
+	// // float error = Math.pow(target - output, 2) / 2;
+	// // float value = activation(this.value);
+	// float error = value * (1 - value) * (target - value);
 	//
 	// System.out.println("output error " + index + ": " + "(" + target
 	// + " - " + value + ") * (1 - " + value + ") * " + value + " = "
@@ -148,14 +152,14 @@ public class Neuron {
 
 	private void updateError() {
 
-		// double value = activation(this.value);
+		// float value = activation(this.value);
 
 		error = value * (1 - value) * (gradient);
 	}
 
 	private void updateWeight(Synapse synapse) {
 
-		// double deltaWeight = -learnRate * (2/5);
+		// float deltaWeight = -learnRate * (2/5);
 		if (synapse != null) {
 			synapse.deltaWeight = learnRate * error
 					* synapse.connectedFrom.value + synapse.deltaWeight
